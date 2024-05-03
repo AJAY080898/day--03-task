@@ -1,0 +1,59 @@
+1.How to compare two JSON have the same properties without order?
+   a.let obj1={name:"person 1",age:5};
+   b.let obj2={age:5;name:"person1"};
+
+function compareJSON(obj1, obj2) {
+    var string1 = JSON.stringify(obj1);
+    var string2 = JSON.stringify(obj2);
+    string1 = sortProperties(string1);
+    string2 = sortProperties(string2);
+    return string1 === string2;
+}
+
+function sortProperties(string) {
+    var obj = JSON.parse(string);
+    var sortedObj = {};
+    Object.keys(obj).sort().forEach(function(key) {
+        sortedObj[key] = obj[key];
+    });
+    return JSON.stringify(sortedObj);
+}
+
+var obj1 = { name: "person 1", age: 5 };
+var obj2 = { age: 5, name: "person 1" };
+
+console.log(compareJSON(obj1, obj2));
+
+2.use the rest countries api url->https://restcountries.com/v3.1/all and display 
+  all the country flags in the console?
+
+fetch('https://restcountries.com/v3.1/all')
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(country => {
+      if (country.flags) {
+        console.log(country.flags.svg);
+      }
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+
+3.use the same rest countries api url->https://restcountries.com/v3.1/all and print all countries 
+   names ,region,sub-region and population?
+
+fetch('https://restcountries.com/v3.1/all')
+  .then(response => response.json())
+  .then(data => {
+    data.forEach(country => {
+      const name = country.name.common;
+      const region = country.region;
+      const subRegion = country.subregion;
+      const population = country.population.toLocaleString(); // Format population with commas
+
+      console.log(`Country: ${name}, Region: ${region}, Sub-region: ${subRegion}, Population: ${population}`);
+    });
+  })
+  .catch(error => console.error('Error fetching data:', error));
